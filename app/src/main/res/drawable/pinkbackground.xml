@@ -3,6 +3,6 @@
     <gradient
         android:type="sweep"
         android:angle="60"
-        android:startColor="#D5451C1C"
-        android:endColor="#DA3B71" />
+        android:startColor="@color/mainColorBlue"
+        android:endColor="@color/header_main_color" />
 </shape>
