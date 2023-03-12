@@ -18,6 +18,7 @@
 
     <color name="dialogbgclr">#FAFAFA</color>
     <color name="header_main_color">#237AE0</color>
+    <color name="mainColorYellow">#ffbf00</color>
     <color name="green">#5FB709</color>
     <color name="Red">#EB0D0D</color>
     <color name="blueish">#17A2C0</color>
@@ -32,6 +33,7 @@
     <color name="lightgray">#12ACAEAF</color>
     <color name="mainColorBlue">#5335FF</color>
     <color name="blueColor">#4D43FA</color>
+    <color name="cardBackgroundColor">#F3F3F3</color>
 
     //indicator color
     <color name="inactive">#C4C4C4</color>

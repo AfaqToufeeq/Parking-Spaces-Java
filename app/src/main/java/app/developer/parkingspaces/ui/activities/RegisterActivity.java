@@ -88,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         if (password.length() < 6) {
-            Toast.makeText(this, "Password should be atleast 6 characters", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Password should be at-least 6 characters", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -107,6 +107,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 phoneNumber);
                     } else {
                         // If sign in fails, display a message to the user.
+                        if(progressDialog.isShowing()) progressDialog.dismiss();
                         Toast.makeText(this, task.getException().getMessage(),
                                 Toast.LENGTH_SHORT).show();
                     }

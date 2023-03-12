@@ -90,10 +90,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-//        if(mAuth.getCurrentUser()!=null)
-//        {
-//            startActivity(new Intent(getApplicationContext(),DashboardActivity.class));
-//            finish();
-//        }
+        if(mAuth.getCurrentUser()!=null)
+        {
+            startActivity(new Intent(getApplicationContext(),DashboardActivity.class));
+            finish();
+        }
     }
 }
