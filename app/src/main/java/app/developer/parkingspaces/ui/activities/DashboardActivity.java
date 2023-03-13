@@ -6,26 +6,25 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import app.developer.parkingspaces.R;
-import app.developer.parkingspaces.ui.fragments.cityAreaFragment;
+import app.developer.parkingspaces.ui.fragments.HomeFragment;
+import app.developer.parkingspaces.utils.PickerManager;
 
 public class DashboardActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     Spinner profileSpinner;
-    String  userName = FirebaseAuth
-            .getInstance()
+    PickerManager pm=PickerManager.getInstance();
+    String  userName = pm.mAuth
             .getCurrentUser()
             .getEmail();
     String[] profileName = {userName,"Sign Out"};
@@ -46,7 +45,6 @@ public class DashboardActivity extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.bottomNavBar);
         profileSpinner = findViewById(R.id.profileSpinner);
-
     }
     private void buttonClicks() {
         //Spinner Click Listener
@@ -63,16 +61,15 @@ public class DashboardActivity extends AppCompatActivity {
                     finish();
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
-
         ArrayAdapter setSpinner = new ArrayAdapter(this,android.R.layout.simple_spinner_item,profileName);
         setSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         profileSpinner.setAdapter(setSpinner);
+
 
     }
 
@@ -82,7 +79,7 @@ public class DashboardActivity extends AppCompatActivity {
 //            "addToCartFragment" -> return addToCartFragment()
 //             else -> return restaurantsFragment()
 //        }
-        return new cityAreaFragment();
+        return new HomeFragment();
     }
 
     private void addFragmentToActivity(Fragment fragment){
@@ -90,7 +87,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft =  fragmentManager.beginTransaction();
-        ft.replace(R.id.dashBoard_FL,fragment).addToBackStack(null).commit();
+        ft.replace(R.id.dashBoard_FL,fragment).addToBackStack("myFragment").commit();
     }
 
     private void bottomNavigation() {
@@ -99,17 +96,16 @@ public class DashboardActivity extends AppCompatActivity {
             switch (item.getItemId())
             {
                 case R.id.HomeMenu:
-                    addFragmentToActivity(new cityAreaFragment());
+                    addFragmentToActivity(new HomeFragment());
                     break;
                 case R.id.bookingMenu:
-                    addFragmentToActivity(new cityAreaFragment());
+                    addFragmentToActivity(new HomeFragment());
                     break;
                 case R.id.ProfileMenu:
-                    addFragmentToActivity(new cityAreaFragment());
+                    addFragmentToActivity(new HomeFragment());
                     break;
             }
             return true;
         });
     }
-
 }

@@ -6,4 +6,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="looking_for_a_parking">Looking for a parking</string>
+    <string name="area">Area</string>
+    <string name="no_files_found">no files found</string>
 </resources>

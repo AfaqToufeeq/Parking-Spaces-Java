@@ -16,14 +16,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import app.developer.parkingspaces.R;
+import app.developer.parkingspaces.utils.PickerManager;
 
 public class LoginActivity extends AppCompatActivity {
 
     EditText email_ET,pass_ET;
     Button loginBtn,signupBtn;
     ProgressDialog progress;
+    PickerManager pm= PickerManager.getInstance();
     //Firebase
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.loginBtn);
         signupBtn = findViewById(R.id.signupBtn);
 
-        // Initialize Firebase
-        mAuth = FirebaseAuth.getInstance();
+
     }
 
     private void buttonClicks() {
@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
        if(!progress.isShowing()) progress.show();
-       mAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(this, task -> {
+       pm.mAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(this, task -> {
            if(task.isSuccessful()){
                if (progress.isShowing()) progress.dismiss();
                Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT).show();
@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        if(mAuth.getCurrentUser()!=null)
+        if(pm.mAuth.getCurrentUser()!=null)
         {
             startActivity(new Intent(getApplicationContext(),DashboardActivity.class));
             finish();
