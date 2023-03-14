@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ParkingSpaces">
         <activity
+            android:name=".ui.activities.DashboardActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.RegisterActivity"
             android:exported="false" />
         <activity
