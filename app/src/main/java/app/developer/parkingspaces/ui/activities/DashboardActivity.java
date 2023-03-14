@@ -1,6 +1,7 @@
 package app.developer.parkingspaces.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -23,6 +24,7 @@ import app.developer.parkingspaces.utils.PickerManager;
 public class DashboardActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     Spinner profileSpinner;
+    CardView dashboardHeader;
     PickerManager pm=PickerManager.getInstance();
     String  userName = pm.mAuth
             .getCurrentUser()
@@ -42,7 +44,6 @@ public class DashboardActivity extends AppCompatActivity {
         buttonClicks();
     }
     private void initViews() {
-
         bottomNavigationView = findViewById(R.id.bottomNavBar);
         profileSpinner = findViewById(R.id.profileSpinner);
     }
@@ -56,7 +57,7 @@ public class DashboardActivity extends AppCompatActivity {
                 if(profileName[position].equals("Sign Out"))
                 {
                     FirebaseAuth.getInstance().signOut();
-                    Toast.makeText(getApplicationContext(), "you are logged out", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "logged out", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(),LoginActivity.class));
                     finish();
                 }
@@ -81,7 +82,6 @@ public class DashboardActivity extends AppCompatActivity {
 //        }
         return new HomeFragment();
     }
-
     private void addFragmentToActivity(Fragment fragment){
         if (fragment == null) return;
 
@@ -89,7 +89,6 @@ public class DashboardActivity extends AppCompatActivity {
         FragmentTransaction ft =  fragmentManager.beginTransaction();
         ft.replace(R.id.dashBoard_FL,fragment).addToBackStack("myFragment").commit();
     }
-
     private void bottomNavigation() {
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {

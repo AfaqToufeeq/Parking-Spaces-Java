@@ -1,6 +1,8 @@
 package app.developer.parkingspaces.adapters;
 
 import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -39,6 +43,35 @@ public class CityAreaAdapter extends RecyclerView.Adapter<CityAreaAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull CityAreaAdapter.ViewHolder holder, int position) {
+        //Set the position here!!!
+        Uri areaUri=null;
+        CityArea currentItem = cityList.get(position);
+
+//        Log.d("ABC","rest: ${currentItem.RestaurantDetails!![0].restaurantName}")
+//        currentItem.restaurantDetails!!.forEach {
+//            Log.d("checkingFoodL","resta: $it")
+//        }
+
+        holder.area_ID.setText("ID "+currentItem.getAreaID());
+        holder.areaTitle_TV.setText(currentItem.getAreaName());
+        holder.areaDes_TV.setText(currentItem.getDescription());
+
+        try{
+            areaUri = Uri.parse(currentItem.getAreaUrl());
+        }catch (Exception e)
+        {
+            Log.d("restaurantAdapter",""+e.getMessage());
+        }
+
+        Glide.with(context)
+                .load(areaUri)
+                .placeholder(R.drawable.add_item_icon)
+                .into(holder.areaImage_IV);
+
+
+        holder.itemView.setOnClickListener(view->{
+            clickListener.onItemClick(position);
+        });
 
     }
 

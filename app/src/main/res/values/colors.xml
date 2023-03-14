@@ -34,7 +34,8 @@
     <color name="mainColorBlue">#5335FF</color>
     <color name="blueColor">#4D43FA</color>
     <color name="cardBackgroundColor">#F3F3F3</color>
-
+    <color name="jer_transparentGray">#5623283A</color>
+    <color name="transparent">#00FFFFFF</color>
     //indicator color
     <color name="inactive">#C4C4C4</color>
     <color name="active">#50C2C9</color>

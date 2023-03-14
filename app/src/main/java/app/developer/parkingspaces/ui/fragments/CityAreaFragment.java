@@ -1,10 +1,12 @@
 package app.developer.parkingspaces.ui.fragments;
 
 import android.app.Dialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -12,6 +14,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,10 +31,12 @@ import app.developer.parkingspaces.R;
 import app.developer.parkingspaces.adapters.CityAreaAdapter;
 import app.developer.parkingspaces.dataclass.CityArea;
 import app.developer.parkingspaces.interfaces.onAreaItemClick;
+import app.developer.parkingspaces.ui.activities.DashboardActivity;
 import app.developer.parkingspaces.utils.PickerManager;
 
 
-public class CityAreaFragment extends Fragment implements onAreaItemClick {
+public class CityAreaFragment extends Fragment
+        implements onAreaItemClick {
     PickerManager pm = PickerManager.getInstance();
     ConstraintLayout layoutEmptyList;
     RecyclerView areaRV;
@@ -56,7 +62,7 @@ public class CityAreaFragment extends Fragment implements onAreaItemClick {
     }
 
     private void initViews(View v) {
-
+        loader=pm.progressDialog(requireActivity());
         layoutEmptyList = v.findViewById(R.id.layout_emptyList);
         areaRV = v.findViewById(R.id.areaRecyclerview);
     }
@@ -70,15 +76,17 @@ public class CityAreaFragment extends Fragment implements onAreaItemClick {
         areaRV.setHasFixedSize(true);
         areaRV.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
+        //Fetching data from firebase
         getAreaDataFromFirebase();
     }
 
     private void getAreaDataFromFirebase() {
 
-//        if(!pm.loader.isShowing()) pm.loader.show();
+        if(!loader.isShowing()) loader.show();
         pm.cityList.clear();
 
-        FirebaseDatabase.getInstance().getReference("Restaurants").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("Restaurants")
+                .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
@@ -88,7 +96,6 @@ public class CityAreaFragment extends Fragment implements onAreaItemClick {
                         CityArea cityArea = snapshot1.getValue(CityArea.class);
                         pm.cityList.add(cityArea);
                     }
-
                     setVisibility();  //visibility
 
                     //setting Adapter
@@ -97,14 +104,23 @@ public class CityAreaFragment extends Fragment implements onAreaItemClick {
                             pm.cityList,
                             CityAreaFragment.this
                     ));
+
+                    if(loader.isShowing()) loader.dismiss();
                 }
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    if(pm.cityList.isEmpty()){
+                        Toast.makeText(requireActivity(), "Something is not right", Toast.LENGTH_SHORT).show();
+                        if(loader.isShowing()) loader.dismiss();
+                        setVisibility();
+                    }
+                },10000);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                if(loader.isShowing()) loader.dismiss();
                 Toast.makeText(requireActivity(),error.getMessage()+"", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     private void onbackPressed() {
@@ -115,8 +131,11 @@ public class CityAreaFragment extends Fragment implements onAreaItemClick {
         if (fragment == null) return;
 
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction ft =  fragmentManager.beginTransaction();
-        ft.replace(R.id.dashBoard_FL,fragment).addToBackStack("myFragment").commit();
+        fragmentManager
+                .beginTransaction()
+                .replace(R.id.dashBoard_FL,fragment)
+                .addToBackStack("myFragment")
+                .commit();
     }
     private void setVisibility() {
         if(!pm.cityList.isEmpty())
@@ -132,7 +151,7 @@ public class CityAreaFragment extends Fragment implements onAreaItemClick {
 
     @Override
     public void onItemClick(int position) {
-
+        setFragment(new ParkingFragment());
     }
 
     @Override

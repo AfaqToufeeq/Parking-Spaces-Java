@@ -56,6 +56,7 @@ public class HomeFragment extends Fragment {
         pm.cityList.add(new CityArea(null,"Lahore",null,null,null));
         pm.cityList.add(new CityArea(null,"Islamabad",null,null,null));
         pm.cityList.add(new CityArea(null,"Kabul",null,null,null));
+
         int i=0;
         while (i<pm.cityList.size())
         {
@@ -70,6 +71,7 @@ public class HomeFragment extends Fragment {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction ft =  fragmentManager.beginTransaction();
         ft.replace(R.id.dashBoard_FL,fragment).addToBackStack("myFragment").commit();
+
     }
 
     private void clickButtons() {
@@ -87,7 +89,7 @@ public class HomeFragment extends Fragment {
 //                ((TextView) adapterView.getChildAt(0)).setTextSize(16);
                 if("Faisalabad".equals(pm.cityList.get(position).getAreaName()))
                 {
-                    Toast.makeText(requireContext(), pm.cityList.get(position).getAreaName(), Toast.LENGTH_SHORT).show();
+
                 }
             }
             @Override
