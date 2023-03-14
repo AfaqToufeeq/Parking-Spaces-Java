@@ -24,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import app.developer.parkingspaces.R;
 import app.developer.parkingspaces.dataclass.User;
+import app.developer.parkingspaces.utils.PickerManager;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -31,9 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
     Button registerBtn;
     TextView alreadyAccountBtn;
     ProgressDialog progressDialog;
-    //Firebase
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
+    PickerManager pm = PickerManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerBtn = findViewById(R.id.registerBtn);
         alreadyAccountBtn = findViewById(R.id.alreadyAccountBtn);
 
-        // Initialize Firebase
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+
     }
 
     private void buttonClicks() {
@@ -88,18 +85,18 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         if (password.length() < 6) {
-            Toast.makeText(this, "Password should be atleast 6 characters", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Password should be at-least 6 characters", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if(!progressDialog.isShowing()) progressDialog.show();
-        mAuth.createUserWithEmailAndPassword(emailAddress, password)
+        pm.mAuth.createUserWithEmailAndPassword(emailAddress, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         //User Info
-                        FirebaseUser user = mAuth.getCurrentUser();
+                        FirebaseUser user = pm.mAuth.getCurrentUser();
                         registerNewUser(
-                                mAuth.getUid(),
+                                pm.mAuth.getUid(),
                                 user,
                                 fullName,
                                 emailAddress,
@@ -107,6 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 phoneNumber);
                     } else {
                         // If sign in fails, display a message to the user.
+                        if(progressDialog.isShowing()) progressDialog.dismiss();
                         Toast.makeText(this, task.getException().getMessage(),
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -117,7 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         User user1 = new User(fullName, emailAddress, password, phoneNumber);
 
-        mDatabase.child("Customers").child(uid).child(fullName).setValue(user1)
+        pm.mDatabase.child("Customers").child(uid).child(fullName).setValue(user1)
                 .addOnSuccessListener(unused -> {
 
                     if(progressDialog.isShowing()) progressDialog.dismiss();
